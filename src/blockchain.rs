@@ -1,16 +1,29 @@
-extern crate chrono;
+#![allow(dead_code)]
 
-use sha2::{Sha256};
+use std::time::{SystemTime};
+use sha2::{Sha256, Digest};
 
 pub struct Blockchain {
     chain: Vec<Block>,
+    transactions: Vec<Transaction>,
 }
 
 impl Blockchain
 {
     pub fn new() -> Blockchain {
+        let mut initial_chain: Vec<Block> = vec![];
+        initial_chain.push(
+            Block{
+                index: 0,
+                epoch: SystemTime::now(),
+                proof: 0,
+                previous_hash: Sha256::new()
+            }
+        );
+
         Blockchain {
-            chain: vec![]
+            chain: initial_chain,
+            transactions: vec![]
         }
     }
 
@@ -18,12 +31,9 @@ impl Blockchain
     {
         let new_index: usize = self.chain.len() + 1;
 
-        //let mut previous_hash = Sha256::new();
-        //previous_hash.update(b"Hej");
-
         let new_block: Block = Block{
             index: new_index as u64,
-            epoch: chrono::Utc::now(),
+            epoch: SystemTime::now(),
             proof: proof,
             previous_hash: previous_hash,
         };
@@ -35,7 +45,14 @@ impl Blockchain
 struct Block
 {
     index: u64,
-    epoch: chrono::DateTime<chrono::Utc>,
+    epoch: SystemTime,
     proof: u64,
     previous_hash: Sha256,
+}
+
+struct Transaction
+{
+    sender: [char; 10],
+    recipient: [char; 10],
+    amount: f64,
 }
