@@ -11,8 +11,8 @@ pub struct Blockchain {
 impl Blockchain
 {
     pub fn new() -> Blockchain {
-        let mut initial_chain: Vec<Block> = vec![];
-        initial_chain.push(
+        let mut new_chain = Vec::new();
+        new_chain.push(
             Block{
                 index: 0,
                 epoch: SystemTime::now(),
@@ -22,8 +22,8 @@ impl Blockchain
         );
 
         Blockchain {
-            chain: initial_chain,
-            transactions: vec![]
+            chain: new_chain,
+            transactions: Vec::new(),
         }
     }
 
@@ -40,14 +40,38 @@ impl Blockchain
 
         self.chain.push(new_block);
     }
+
+    pub fn get_last_block(&mut self) -> &Block
+    {
+        self.chain.last().expect("No elements in blockchain.")
+    }
+
+    pub fn hash(block: &Block) -> Sha256
+    {
+        let mut hash = Sha256::new();
+        hash.update(block.index.to_le_bytes());
+        hash.update(block.get_time().to_le_bytes());
+        hash.update(block.proof.to_le_bytes());
+        //hash.update(self.get_last_block().previous_hash.finalize());
+
+        hash
+    }
 }
 
-struct Block
+pub struct Block
 {
     index: u64,
     epoch: SystemTime,
     proof: u64,
     previous_hash: Sha256,
+}
+
+impl Block
+{
+    pub fn get_time(&self) -> u128
+    {
+        self.epoch.duration_since(SystemTime::UNIX_EPOCH).expect("").as_millis()
+    }
 }
 
 struct Transaction
