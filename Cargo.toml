@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 time = "0.3.3"
 sha2 = "0.9.8"
+#hex-literal = "0.3.3"

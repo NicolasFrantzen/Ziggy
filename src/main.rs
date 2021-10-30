@@ -1,15 +1,21 @@
 mod blockchain;
 use blockchain::*;
-use sha2::{Sha256, Digest};
+//use sha2::{Sha256, Digest};
 
-fn mine_new_block(block: &mut Blockchain)
+fn mine_new_block(blockchain: &mut Blockchain)
 {
-    block.create_block(0, Sha256::new());
-}
+    let last_block = blockchain.get_last_block();
 
+    let proof = Blockchain::proof_of_work(last_block.get_proof());
+    let hash = blockchain.hash();
+    blockchain.create_block(proof, hash);
+}
 
 fn main() {
     let mut block = Blockchain::new();
 
     mine_new_block(&mut block);
+
+    let result = Blockchain::proof_of_work(0);
+    println!("{}", result);
 }
