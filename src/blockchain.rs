@@ -1,11 +1,12 @@
 #![allow(dead_code)]
 
+use std::mem;
 use std::time::{SystemTime};
 use sha2::{Sha256, Digest};
 
 pub struct Blockchain {
     chain: Vec<Block>,
-    transactions: Vec<Transaction>,
+    pending_transactions: Vec<Transaction>,
 }
 
 impl Blockchain
@@ -17,25 +18,29 @@ impl Blockchain
                 index: 0,
                 epoch: SystemTime::now(),
                 proof: 0,
-                previous_hash: Sha256::new()
+                previous_hash: Sha256::new(),
+                transactions: Vec::new(),
             }
         );
 
         Blockchain {
             chain: new_chain,
-            transactions: Vec::new(),
+            pending_transactions: Vec::new(),
         }
     }
 
+
     pub fn create_block(&mut self, proof: u64, previous_hash: Sha256)
     {
-        let new_index: usize = self.chain.len() + 1;
+        let transactions = mem::take(&mut self.pending_transactions);
+        assert!(self.pending_transactions.is_empty());
 
         let new_block: Block = Block{
-            index: new_index as u64,
+            index: (self.chain.len() + 1) as u64,
             epoch: SystemTime::now(),
             proof: proof,
             previous_hash: previous_hash,
+            transactions: transactions,
         };
 
         self.chain.push(new_block);
@@ -64,6 +69,7 @@ pub struct Block
     epoch: SystemTime,
     proof: u64,
     previous_hash: Sha256,
+    transactions: Vec<Transaction>,
 }
 
 impl Block
