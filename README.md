@@ -1,2 +1,2 @@
-# Siggy
-A blockchain project for learning purposes
+# Ziggy
+A blockchain project written in Rust for learning.
