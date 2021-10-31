@@ -1,7 +1,7 @@
 
 syntax = "proto3";
 
-package ziggy;
+package zigzag;
 
 import "google/protobuf/empty.proto";
 
@@ -10,6 +10,8 @@ service ZiggyBlockchain {
 }
 
 message MineResponse {
-    string message = 1;
-    // TODO
+    uint64 index = 1;
+    uint64 time = 2;
+    uint64 proof = 3;
+    //string previous_hash = 4;
 }

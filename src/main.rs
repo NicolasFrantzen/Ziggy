@@ -1,7 +1,11 @@
-mod blockchain;
-use blockchain::*;
+use tonic::{transport::Server, Request, Response, Status};
 
-tonic::include_proto!("ziggy");
+use zigzag::ziggy_blockchain_server::{ZiggyBlockchain, ZiggyBlockchainServer};
+use zigzag::{MineResponse};
+mod zigzag;
+
+use blockchain::{Blockchain};
+mod blockchain;
 
 fn mine_new_block(blockchain: &mut Blockchain)
 {
@@ -12,11 +16,40 @@ fn mine_new_block(blockchain: &mut Blockchain)
     blockchain.create_block(proof, hash);
 }
 
-fn main() {
-    let mut block = Blockchain::new();
+#[derive(Default)]
+pub struct MyZiggyBlockchain {}
 
+#[tonic::async_trait]
+impl ZiggyBlockchain for MyZiggyBlockchain
+{
+    async fn mine(&self, _request: Request<()>) -> Result<Response<MineResponse>, Status>
+    {
+        Ok(Response::new(MineResponse{
+             index: 0,
+             time: 0,
+             proof: 0,
+        }))
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>>
+{
+    let addr = "[::1]:50051".parse().unwrap();
+    let service = MyZiggyBlockchain::default();
+    println!("Server listening on {}", addr);
+
+    // Blockchain
+    let mut block = Blockchain::new();
     mine_new_block(&mut block);
 
     let result = Blockchain::proof_of_work(0);
     println!("{}", result);
+    // Blockchain end
+
+    Server::builder()
+        .add_service(ZiggyBlockchainServer::new(service))
+        .serve(addr)
+        .await?;
+    Ok(())
 }
