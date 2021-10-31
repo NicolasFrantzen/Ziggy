@@ -9,3 +9,8 @@ edition = "2021"
 time = "0.3.3"
 sha2 = "0.9.8"
 #hex-literal = "0.3.3"
+tonic = "0.6.0"
+prost = "0.9.0"
+
+[build-dependencies]
+tonic-build = "0.6.0"

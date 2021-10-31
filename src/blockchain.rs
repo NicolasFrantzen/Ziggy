@@ -125,9 +125,10 @@ impl Blockchain
         hash.update(proof.to_le_bytes());
         let digested = hash.finalize();
 
+        // TODO remove
         {
             let test: String = format!("{:X}", digested);
-            println!("Validating: {}", test); // TODO remove
+            println!("Validating: {}", test);
         }
 
         digested[digested.len() - 2..] == [0x00, 0x00]

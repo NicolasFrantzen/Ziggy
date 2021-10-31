@@ -1,6 +1,7 @@
 mod blockchain;
 use blockchain::*;
-//use sha2::{Sha256, Digest};
+
+tonic::include_proto!("ziggy");
 
 fn mine_new_block(blockchain: &mut Blockchain)
 {

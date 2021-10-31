@@ -1,0 +1,15 @@
+
+syntax = "proto3";
+
+package ziggy;
+
+import "google/protobuf/empty.proto";
+
+service ZiggyBlockchain {
+    rpc Mine (google.protobuf.Empty) returns (MineResponse);
+}
+
+message MineResponse {
+    string message = 1;
+    // TODO
+}
