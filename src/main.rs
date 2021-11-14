@@ -1,51 +1,67 @@
+use std::sync::Mutex;
+
 use tonic::{transport::Server, Request, Response, Status};
 
 use zigzag::ziggy_blockchain_server::{ZiggyBlockchain, ZiggyBlockchainServer};
 use zigzag::{MineResponse};
 mod zigzag;
 
-use blockchain::{Blockchain};
+use blockchain::{Blockchain, Block};
 mod blockchain;
 
-fn mine_new_block(blockchain: &mut Blockchain)
-{
-    let last_block = blockchain.get_last_block();
 
-    let proof = Blockchain::proof_of_work(last_block.get_proof());
-    let hash = blockchain.hash();
-    blockchain.create_block(proof, hash);
+struct MyZiggyBlockchain
+{
+    blockchain: Mutex<Blockchain>
 }
 
-#[derive(Default)]
-pub struct MyZiggyBlockchain {}
+
+impl MyZiggyBlockchain
+{
+    pub fn new() -> MyZiggyBlockchain
+    {
+        MyZiggyBlockchain { blockchain: Mutex::new(Blockchain::new()) }
+    }
+
+    fn mine_new_block(&self) -> Block
+    {
+        let mut chain = self.blockchain.lock().unwrap();
+        let last_block = chain.get_last_block();
+        let proof = Blockchain::proof_of_work(last_block.get_proof());
+        let hash = chain.hash();
+
+        chain.create_block(proof, hash)
+    }
+}
+
 
 #[tonic::async_trait]
 impl ZiggyBlockchain for MyZiggyBlockchain
 {
     async fn mine(&self, _request: Request<()>) -> Result<Response<MineResponse>, Status>
     {
+        println!("Mining request received.");
+
+        let new_block = self.mine_new_block();
+        let proof = new_block.get_proof();
+
+        println!("Proof: {}", proof);
+
         Ok(Response::new(MineResponse{
-             index: 0,
-             time: 0,
-             proof: 0,
+             index: new_block.get_index(),
+             time: new_block.get_time() as u64,
+             proof: proof,
         }))
     }
 }
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>>
 {
     let addr = "[::1]:50051".parse().unwrap();
-    let service = MyZiggyBlockchain::default();
+    let service = MyZiggyBlockchain::new();
     println!("Server listening on {}", addr);
-
-    // Blockchain
-    let mut block = Blockchain::new();
-    mine_new_block(&mut block);
-
-    let result = Blockchain::proof_of_work(0);
-    println!("{}", result);
-    // Blockchain end
 
     Server::builder()
         .add_service(ZiggyBlockchainServer::new(service))

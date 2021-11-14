@@ -5,6 +5,10 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[[bin]]
+name = "mine"
+path = "src/mine.rs"
+
 [dependencies]
 time = "0.3.3"
 sha2 = "0.9.8"
