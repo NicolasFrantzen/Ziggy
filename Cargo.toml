@@ -9,6 +9,10 @@ edition = "2021"
 name = "mine"
 path = "src/mine.rs"
 
+[[bin]]
+name = "transaction"
+path = "src/transaction.rs"
+
 [dependencies]
 time = "0.3.3"
 sha2 = "0.9.8"

@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 
 service ZiggyBlockchain {
     rpc Mine (google.protobuf.Empty) returns (MineResponse);
+    rpc NewTransaction (NewTransactionRequest) returns (NewTransactionResponse);
 }
 
 message MineResponse {
@@ -14,4 +15,14 @@ message MineResponse {
     uint64 time = 2;
     uint64 proof = 3;
     string previous_hash = 4;
+}
+
+message NewTransactionRequest {
+    string sender = 1;
+    string recipient = 2;
+    double amount = 3;
+}
+
+message NewTransactionResponse {
+
 }

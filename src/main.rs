@@ -3,7 +3,7 @@ use std::sync::Mutex;
 use tonic::{transport::Server, Request, Response, Status};
 
 use zigzag::ziggy_blockchain_server::{ZiggyBlockchain, ZiggyBlockchainServer};
-use zigzag::{MineResponse};
+use zigzag::{MineResponse, NewTransactionRequest, NewTransactionResponse};
 mod zigzag;
 
 use blockchain::{Blockchain, Block};
@@ -30,7 +30,14 @@ impl MyZiggyBlockchain
         let proof = Blockchain::proof_of_work(last_block.get_proof());
         let hash = chain.hash();
 
+        // TODO: maybe use get_last_block ref instead
         chain.create_block(proof, hash)
+    }
+
+    fn add_new_transaction(&self, sender: String, recipient: String, amount: f64)
+    {
+        let mut chain = self.blockchain.lock().unwrap();
+        chain.new_transaction(sender, recipient, amount)
     }
 }
 
@@ -52,6 +59,19 @@ impl ZiggyBlockchain for MyZiggyBlockchain
              proof: new_block.get_proof(),
              previous_hash: new_block.get_previous_hash(),
         }))
+    }
+
+    async fn new_transaction(&self, request: Request<NewTransactionRequest>) -> Result<Response<NewTransactionResponse>, Status>
+    {
+        println!("New transaction request received.");
+
+        let request = request.get_ref();
+
+        dbg!(request);
+
+        self.add_new_transaction(request.sender.clone(), request.recipient.clone(), request.amount);
+
+        Ok(Response::new(NewTransactionResponse{}))
     }
 }
 

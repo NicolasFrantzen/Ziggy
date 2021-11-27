@@ -24,6 +24,20 @@
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
       },
+      "category": "New features",
+      "creation_time": "2021-11-27T22:15:14.207Z",
+      "description": {
+        "content": "Right now, new transactions is only added as an example. Add input via argv for example.",
+        "mime": "text/markdown"
+      },
+      "id": "6",
+      "references": [],
+      "title": "Interface for adding transactions"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
       "category": "Improvements",
       "creation_time": "2021-11-27T20:10:45.654Z",
       "description": {
@@ -33,9 +47,25 @@
       "id": "2",
       "references": [],
       "title": "Refactor blockchain.create_block"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T22:15:57.018Z",
+      "description": {
+        "content": "We need an RPC call to get the whole chain.",
+        "mime": "text/markdown"
+      },
+      "id": "7",
+      "references": [],
+      "title": "Implement get_chain"
     }
   ],
-  "in-progress": [
+  "in-progress": [],
+  "testing": [],
+  "done": [
     {
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
@@ -45,10 +75,7 @@
       "id": "3",
       "references": [],
       "title": "Add transactions"
-    }
-  ],
-  "testing": [],
-  "done": [
+    },
     {
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"

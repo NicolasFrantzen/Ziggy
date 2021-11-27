@@ -42,8 +42,8 @@ impl Block
 #[derive(Clone, Debug)]
 struct Transaction
 {
-    sender: [char; 10],
-    recipient: [char; 10],
+    sender: String,
+    recipient: String,
     amount: f64,
 }
 
@@ -96,7 +96,7 @@ impl Blockchain
     }
 
 
-    pub fn new_transaction(&mut self, sender: [char; 10], recipient: [char; 10], amount: f64)
+    pub fn new_transaction(&mut self, sender: String, recipient: String, amount: f64)
     {
         self.pending_transactions.push(
             Transaction{
