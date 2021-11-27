@@ -43,14 +43,14 @@ impl ZiggyBlockchain for MyZiggyBlockchain
         println!("Mining request received.");
 
         let new_block = self.mine_new_block();
-        let proof = new_block.get_proof();
 
-        println!("Proof: {}", proof);
+        dbg!(&new_block);
 
         Ok(Response::new(MineResponse{
              index: new_block.get_index(),
              time: new_block.get_time() as u64,
-             proof: proof,
+             proof: new_block.get_proof(),
+             previous_hash: new_block.get_previous_hash(),
         }))
     }
 }

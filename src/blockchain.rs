@@ -3,8 +3,7 @@ use std::time::{SystemTime};
 use sha2::{Sha256, Digest};
 //use hex_literal::hex;
 
-
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Block
 {
     index: u64,
@@ -31,10 +30,16 @@ impl Block
     {
         self.proof
     }
+
+    pub fn get_previous_hash(&self) -> String
+    {
+        let digested = self.previous_hash.clone().finalize();
+
+        format!("{:X}", digested)
+    }
 }
 
-
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Transaction
 {
     sender: [char; 10],

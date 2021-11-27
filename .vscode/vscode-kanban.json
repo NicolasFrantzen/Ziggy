@@ -4,13 +4,64 @@
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
       },
+      "category": "Unit tests",
       "creation_time": "2021-11-27T20:06:05.255Z",
       "id": "1",
       "references": [],
-      "title": "Test"
+      "title": "Add unit testing"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:41:23.734Z",
+      "id": "5",
+      "references": [],
+      "title": "Implement wallets"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Improvements",
+      "creation_time": "2021-11-27T20:10:45.654Z",
+      "description": {
+        "content": "The function should probably return something smaller. Cloning is very expensive",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "references": [],
+      "title": "Refactor blockchain.create_block"
     }
   ],
-  "in-progress": [],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:11:45.781Z",
+      "id": "3",
+      "references": [],
+      "title": "Add transactions"
+    }
+  ],
   "testing": [],
-  "done": []
+  "done": [
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:22:30.328Z",
+      "description": {
+        "content": "It's currently commented.",
+        "mime": "text/markdown"
+      },
+      "id": "4",
+      "references": [],
+      "title": "Implement previous_hash in mine response"
+    }
+  ]
 }

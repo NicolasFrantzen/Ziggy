@@ -13,5 +13,5 @@ message MineResponse {
     uint64 index = 1;
     uint64 time = 2;
     uint64 proof = 3;
-    //string previous_hash = 4;
+    string previous_hash = 4;
 }
