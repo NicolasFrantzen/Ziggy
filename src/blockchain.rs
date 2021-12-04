@@ -1,7 +1,7 @@
 use std::mem;
 use std::time::{SystemTime};
 use sha2::{Sha256, Digest};
-//use hex_literal::hex;
+
 
 #[derive(Clone, Debug)]
 pub struct Block
@@ -16,20 +16,14 @@ pub struct Block
 
 impl Block
 {
-    pub fn get_index(&self) -> u64
-    {
-        self.index
-    }
+    pub fn get_index(&self) -> u64 { self.index }
 
     pub fn get_time(&self) -> u128
     {
         self.epoch.duration_since(SystemTime::UNIX_EPOCH).expect("").as_millis()
     }
 
-    pub fn get_proof(&self) -> u64
-    {
-        self.proof
-    }
+    pub fn get_proof(&self) -> u64 { self.proof }
 
     pub fn get_previous_hash(&self) -> String
     {
@@ -104,7 +98,9 @@ impl Blockchain
                 recipient: recipient,
                 amount: amount
             }
-        )
+        );
+
+        dbg!(&self.pending_transactions);
     }
 
 
@@ -147,14 +143,24 @@ impl Blockchain
         let mut hash = Sha256::new();
         hash.update(last_proof.to_le_bytes());
         hash.update(proof.to_le_bytes());
-        let digested = hash.finalize();
 
-        // TODO remove
-        {
-            let test: String = format!("{:X}", digested);
-            println!("Validating: {}", test);
-        }
+        let digested = hash.finalize();
+        dbg!(format!("{:X}", digested));
 
         digested[digested.len() - 2..] == [0x00, 0x00]
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn proof_of_work()
+    {
+        assert!(Blockchain::validate_proof(0, 2336));
+        assert!(Blockchain::validate_proof(1, 45));
+        assert!(Blockchain::validate_proof(2, 32976));
     }
 }
