@@ -1,0 +1,94 @@
+{
+  "todo": [
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Unit tests",
+      "creation_time": "2021-11-27T20:06:05.255Z",
+      "id": "1",
+      "references": [],
+      "title": "Add unit testing"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:41:23.734Z",
+      "id": "5",
+      "references": [],
+      "title": "Implement wallets"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T22:15:14.207Z",
+      "description": {
+        "content": "Right now, new transactions is only added as an example. Add input via argv for example.",
+        "mime": "text/markdown"
+      },
+      "id": "6",
+      "references": [],
+      "title": "Interface for adding transactions"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Improvements",
+      "creation_time": "2021-11-27T20:10:45.654Z",
+      "description": {
+        "content": "The function should probably return something smaller. Cloning is very expensive",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "references": [],
+      "title": "Refactor blockchain.create_block"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T22:15:57.018Z",
+      "description": {
+        "content": "We need an RPC call to get the whole chain.",
+        "mime": "text/markdown"
+      },
+      "id": "7",
+      "references": [],
+      "title": "Implement get_chain"
+    }
+  ],
+  "in-progress": [],
+  "testing": [],
+  "done": [
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:11:45.781Z",
+      "id": "3",
+      "references": [],
+      "title": "Add transactions"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:22:30.328Z",
+      "description": {
+        "content": "It's currently commented.",
+        "mime": "text/markdown"
+      },
+      "id": "4",
+      "references": [],
+      "title": "Implement previous_hash in mine response"
+    }
+  ]
+}
