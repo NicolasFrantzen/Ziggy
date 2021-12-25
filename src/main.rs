@@ -2,13 +2,19 @@ use std::sync::Mutex;
 
 use tonic::{transport::Server, Request, Response, Status};
 
-use zigzag::ziggy_blockchain_server::{ZiggyBlockchain, ZiggyBlockchainServer};
-use zigzag::{MineResponse, NewTransactionRequest, NewTransactionResponse};
+use zigzag::ziggy_blockchain_server::{
+    ZiggyBlockchain, ZiggyBlockchainServer
+};
+use zigzag::{
+    MineResponse, NewTransactionRequest, NewTransactionResponse, GetChainResponse, Block as GrpcBlock,
+    Blockchain as GrpcBlockchain,
+};
 mod zigzag;
 
 use blockchain::{Blockchain, Block};
 mod blockchain;
 
+mod conversion;
 
 struct MyZiggyBlockchain
 {
@@ -34,10 +40,10 @@ impl MyZiggyBlockchain
         chain.create_block(proof, hash)
     }
 
-    fn add_new_transaction(&self, sender: String, recipient: String, amount: f64)
+    fn add_new_transaction(&self, sender: &str, recipient: &str, amount: f64)
     {
         let mut chain = self.blockchain.lock().unwrap();
-        chain.new_transaction(sender, recipient, amount)
+        chain.new_transaction(sender, recipient, amount);
     }
 }
 
@@ -53,11 +59,8 @@ impl ZiggyBlockchain for MyZiggyBlockchain
 
         dbg!(&new_block);
 
-        Ok(Response::new(MineResponse{
-             index: new_block.get_index(),
-             time: new_block.get_time() as u64,
-             proof: new_block.get_proof(),
-             previous_hash: new_block.get_previous_hash(),
+        Ok(Response::new(MineResponse {
+            block: Some(GrpcBlock::from(new_block))
         }))
     }
 
@@ -66,12 +69,22 @@ impl ZiggyBlockchain for MyZiggyBlockchain
         println!("New transaction request received.");
 
         let request = request.get_ref();
+        match &request.transaction
+        {
+            Some(transaction) => self.add_new_transaction(&transaction.sender, &transaction.recipient, transaction.amount),
+            None => ()
+        }
 
         dbg!(request);
 
-        self.add_new_transaction(request.sender.clone(), request.recipient.clone(), request.amount);
-
         Ok(Response::new(NewTransactionResponse{}))
+    }
+
+    async fn get_chain(&self, _request: Request<()>) -> Result<Response<GetChainResponse>, Status>
+    {
+        let blocks = vec![GrpcBlock {index: 0, time: 0, proof: 0, previous_hash: String::from("hej")}];
+
+        Ok(Response::new(GetChainResponse {blockchain: Some(GrpcBlockchain{blocks: blocks})}))
     }
 }
 

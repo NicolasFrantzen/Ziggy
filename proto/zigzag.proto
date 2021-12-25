@@ -8,16 +8,18 @@ import "google/protobuf/empty.proto";
 service ZiggyBlockchain {
     rpc Mine (google.protobuf.Empty) returns (MineResponse);
     rpc NewTransaction (NewTransactionRequest) returns (NewTransactionResponse);
+    rpc GetChain (google.protobuf.Empty) returns (GetChainResponse);
 }
 
 message MineResponse {
-    uint64 index = 1;
-    uint64 time = 2;
-    uint64 proof = 3;
-    string previous_hash = 4;
+    Block block = 1;
 }
 
 message NewTransactionRequest {
+    Transaction transaction = 1;
+}
+
+message Transaction {
     string sender = 1;
     string recipient = 2;
     double amount = 3;
@@ -25,4 +27,22 @@ message NewTransactionRequest {
 
 message NewTransactionResponse {
 
+}
+
+message Block {
+    uint64 index = 1;
+    uint64 time = 2;
+    uint64 proof = 3;
+    string previous_hash = 4;
+
+    // Add transactions
+    //repeated Transaction Transactions;
+}
+
+message GetChainResponse {
+    Blockchain blockchain = 1;
+}
+
+message Blockchain {
+    repeated Block blocks = 1;
 }

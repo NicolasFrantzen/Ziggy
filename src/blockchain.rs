@@ -17,13 +17,12 @@ pub struct Block
 impl Block
 {
     pub fn get_index(&self) -> u64 { self.index }
+    pub fn get_proof(&self) -> u64 { self.proof }
 
     pub fn get_time(&self) -> u128
     {
         self.epoch.duration_since(SystemTime::UNIX_EPOCH).expect("").as_millis()
     }
-
-    pub fn get_proof(&self) -> u64 { self.proof }
 
     pub fn get_previous_hash(&self) -> String
     {
@@ -33,12 +32,22 @@ impl Block
     }
 }
 
+
 #[derive(Clone, Debug)]
-struct Transaction
+pub struct Transaction
 {
     sender: String,
     recipient: String,
     amount: f64,
+}
+
+
+impl Transaction
+{
+    pub fn hash(&mut self) -> Sha256
+    {
+        todo!();
+    }
 }
 
 
@@ -73,15 +82,12 @@ impl Blockchain
     // Cloning is very expensive
     pub fn create_block(&mut self, proof: u64, previous_hash: Sha256) -> Block
     {
-        let transactions = mem::take(&mut self.pending_transactions);
-        assert!(self.pending_transactions.is_empty());
-
-        let new_block: Block = Block{
+        let new_block: Block = Block {
             index: (self.chain.len() + 1) as u64,
             epoch: SystemTime::now(),
             proof: proof,
             previous_hash: previous_hash,
-            transactions: transactions,
+            transactions: mem::take(&mut self.pending_transactions),
         };
 
         self.chain.push(new_block.clone());
@@ -90,15 +96,17 @@ impl Blockchain
     }
 
 
-    pub fn new_transaction(&mut self, sender: String, recipient: String, amount: f64)
+    pub fn new_transaction(&mut self, sender: &str, recipient: &str, amount: f64)
     {
-        self.pending_transactions.push(
-            Transaction{
-                sender: sender,
-                recipient: recipient,
-                amount: amount
-            }
-        );
+        if amount > 0.0
+        {
+            self.pending_transactions.push(Transaction {
+                    sender: String::from(sender),
+                    recipient: String::from(recipient),
+                    amount
+                }
+            );
+        }
 
         dbg!(&self.pending_transactions);
     }
@@ -118,7 +126,8 @@ impl Blockchain
         hash.update(block.index.to_le_bytes());
         hash.update(block.get_time().to_le_bytes());
         hash.update(block.proof.to_le_bytes());
-        //hash.update(self.get_last_block().previous_hash.finalize());
+        hash.update(block.previous_hash.clone().finalize());
+        //hash.update(block.transactions);
 
         hash
     }
@@ -162,5 +171,31 @@ mod tests {
         assert!(Blockchain::validate_proof(0, 2336));
         assert!(Blockchain::validate_proof(1, 45));
         assert!(Blockchain::validate_proof(2, 32976));
+    }
+
+
+    #[test]
+    fn new_transactions()
+    {
+        let mut blockchain = Blockchain::new();
+        blockchain.new_transaction("test1", "test2", 1.0);
+        blockchain.new_transaction("test2", "test1", 2.0);
+
+        assert!(blockchain.pending_transactions.len() == 2);
+    }
+
+
+    #[test]
+    fn add_new_block()
+    {
+        let mut blockchain = Blockchain::new();
+        blockchain.new_transaction("test1", "test2", 1.0);
+        blockchain.new_transaction("test2", "test1", 2.0);
+
+        blockchain.create_block(1234, Sha256::new());
+
+        // Pending transactions are moved
+        assert!(blockchain.pending_transactions.is_empty());
+        assert!(blockchain.chain[blockchain.chain.len() - 1].transactions.len() == 2);
     }
 }

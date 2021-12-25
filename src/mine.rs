@@ -1,4 +1,4 @@
-use zigzag::ziggy_blockchain_client::{ZiggyBlockchainClient};
+use zigzag::ziggy_blockchain_client::ZiggyBlockchainClient;
 mod zigzag;
 
 #[tokio::main]
