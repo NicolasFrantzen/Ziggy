@@ -1,4 +1,4 @@
-use crate::zigzag::{
+use ziggy::zigzag::{
     Block as GrpcBlock, Blockchain as GrpcBlockchain,
 };
 use crate::blockchain::{Block, Blockchain};

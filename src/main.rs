@@ -2,12 +2,9 @@ use std::sync::Mutex;
 
 use tonic::{transport::Server, Request, Response, Status};
 
-use ziggy::zigzag;
-use zigzag::ziggy_blockchain_server::{
-    ZiggyBlockchain, ZiggyBlockchainServer
-};
-use zigzag::{
-    MineResponse, NewTransactionRequest, NewTransactionResponse, GetChainResponse, Block as GrpcBlock,
+use ziggy::zigzag::{
+    ziggy_blockchain_server::ZiggyBlockchain, ziggy_blockchain_server::ZiggyBlockchainServer, MineResponse,
+    NewTransactionRequest, NewTransactionResponse, GetChainResponse, Block as GrpcBlock,
     Blockchain as GrpcBlockchain,
 };
 
