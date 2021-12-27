@@ -1,5 +1,5 @@
 use std::mem;
-use std::time::{SystemTime};
+use std::time::SystemTime;
 use sha2::{Sha256, Digest};
 
 

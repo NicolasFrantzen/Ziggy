@@ -1,11 +1,10 @@
 use clap::{Arg, App, AppSettings};
 
+use ziggy::zigzag;
 use zigzag::ziggy_blockchain_client::ZiggyBlockchainClient;
 use zigzag::{
     NewTransactionRequest, Transaction as GrpcTransaction
 };
-mod zigzag;
-
 
 fn check_amount(argument: &str) -> Result<(), String>
 {

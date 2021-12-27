@@ -1,5 +1,6 @@
+use ziggy::zigzag;
 use zigzag::ziggy_blockchain_client::ZiggyBlockchainClient;
-mod zigzag;
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>>
