@@ -30,11 +30,10 @@ impl MyZiggyBlockchain
     {
         let mut chain = self.blockchain.lock().unwrap();
         let last_block = chain.get_last_block();
-        let proof = Blockchain::proof_of_work(last_block.get_proof());
+        let nonce = Blockchain::proof_of_work(last_block.nonce());
         let hash = chain.hash();
 
-        // TODO: maybe use get_last_block ref instead
-        chain.create_block(proof, hash)
+        chain.create_block(nonce, hash)
     }
 
     fn add_new_transaction(&self, sender: &str, recipient: &str, amount: f64)
@@ -79,9 +78,9 @@ impl ZiggyBlockchain for MyZiggyBlockchain
 
     async fn get_chain(&self, _request: Request<()>) -> Result<Response<GetChainResponse>, Status>
     {
-        let blocks = vec![GrpcBlock {index: 0, time: 0, proof: 0, previous_hash: String::from("hej")}];
+        let blocks = vec![GrpcBlock {index: 0, time: 0, nonce: 0, previous_hash: String::from("hej")}];
 
-        Ok(Response::new(GetChainResponse {blockchain: Some(GrpcBlockchain{blocks: blocks})}))
+        Ok(Response::new(GetChainResponse {blockchain: Some(GrpcBlockchain{blocks})}))
     }
 }
 

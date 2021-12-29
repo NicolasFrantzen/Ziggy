@@ -15,7 +15,7 @@ fn check_amount(argument: &str) -> Result<(), String>
 
     if amount > 0.0
     {
-        return Ok(());
+        Ok(())
     }
     else
     {
