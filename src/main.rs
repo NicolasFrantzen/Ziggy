@@ -1,6 +1,7 @@
 use std::sync::Mutex;
 
 use tonic::{transport::Server, Request, Response, Status};
+use anyhow::Result;
 
 use ziggy::zigzag::{
     ziggy_blockchain_server::ZiggyBlockchain, ziggy_blockchain_server::ZiggyBlockchainServer, MineResponse,
@@ -8,10 +9,7 @@ use ziggy::zigzag::{
     Blockchain as GrpcBlockchain,
 };
 
-use blockchain::{Blockchain, Block};
-mod blockchain;
-
-mod conversion;
+use ziggy::blockchain::{Blockchain, Block};
 
 struct MyZiggyBlockchain
 {
@@ -86,7 +84,7 @@ impl ZiggyBlockchain for MyZiggyBlockchain
 
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>>
+async fn main() -> Result<()>
 {
     let addr = "[::1]:50051".parse().unwrap();
     let service = MyZiggyBlockchain::new();

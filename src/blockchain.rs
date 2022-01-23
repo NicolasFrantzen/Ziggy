@@ -45,6 +45,10 @@ pub struct Transaction
 
 impl Transaction
 {
+    pub fn sender(&self) -> &str { &self.sender }
+    pub fn recipient(&self) -> &str { &self.recipient }
+    pub fn amount(&self) -> f64 { self.amount }
+
     pub fn time(&self) -> u128
     {
         self.time.duration_since(SystemTime::UNIX_EPOCH).expect("").as_millis()

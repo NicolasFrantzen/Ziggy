@@ -29,14 +29,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>
     let args = App::new("transaction")
         .subcommand(App::new("new")
             .arg(Arg::new("sender")
-                .about("Sender of the transaction")
+                .help("Sender of the transaction")
                 .takes_value(true)
                 .required(true))
             .arg(Arg::new("recipient")
-                .about("Recipient of the transaction")
+                .help("Recipient of the transaction")
                 .required(true))
             .arg(Arg::new("amount")
-                .about("Amount of Ziggy to send")
+                .help("Amount of Ziggy to send")
                 .takes_value(true)
                 .validator(check_amount)
                 .required(true)))
@@ -56,7 +56,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>
                 transaction: Some(GrpcTransaction {
                     sender: String::from(args.value_of("sender").unwrap()),
                     recipient: String::from(args.value_of("recipient").unwrap()),
-                    amount: args.value_of_t("amount").unwrap_or(0.0)
+                    amount: args.value_of_t("amount").unwrap_or(0.0),
+                    time: None
                 })
             }
         )).await?.into_inner();

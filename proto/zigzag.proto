@@ -23,6 +23,7 @@ message Transaction {
     string sender = 1;
     string recipient = 2;
     double amount = 3;
+    optional uint64 time = 4;
 }
 
 message NewTransactionResponse {

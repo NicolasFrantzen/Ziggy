@@ -1,7 +1,7 @@
-use ziggy::zigzag::{
-    Block as GrpcBlock, Blockchain as GrpcBlockchain,
+use crate::zigzag::{
+    Block as GrpcBlock, Blockchain as GrpcBlockchain, Transaction as GrpcTransaction
 };
-use crate::blockchain::{Block, Blockchain};
+use crate::blockchain::{Block, Blockchain, Transaction};
 
 
 impl From<Block> for GrpcBlock
@@ -17,10 +17,25 @@ impl From<Block> for GrpcBlock
     }
 }
 
+
 impl From<Blockchain> for GrpcBlockchain
 {
     fn from(_blockchain: Blockchain) -> GrpcBlockchain
     {
         todo!();
+    }
+}
+
+
+impl From<Transaction> for GrpcTransaction
+{
+    fn from(transaction: Transaction) -> GrpcTransaction
+    {
+        GrpcTransaction {
+            sender: String::from(transaction.sender()),
+            recipient: String::from(transaction.recipient()),
+            amount: transaction.amount(),
+            time: Some(transaction.time() as u64),
+        }
     }
 }
