@@ -1,8 +1,11 @@
-use zigzag::ziggy_blockchain_client::{ZiggyBlockchainClient};
-mod zigzag;
+use ziggy::zigzag;
+use zigzag::ziggy_blockchain_client::ZiggyBlockchainClient;
+
+use anyhow::Result;
+
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>>
+async fn main() -> Result<()>
 {
     let channel = tonic::transport::Channel::from_static("http://[::1]:50051")
     .connect()
@@ -11,6 +14,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>
     let mut client = ZiggyBlockchainClient::new(channel);
 
     let response = client.mine(tonic::Request::new(())).await?.into_inner();
-    println!("RESPONSE={:?}", response);
+    dbg!(response);
+
     Ok(())
 }

@@ -1,25 +1,18 @@
 [package]
 name = "ziggy"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[[bin]]
-name = "mine"
-path = "src/mine.rs"
-
-[[bin]]
-name = "transaction"
-path = "src/transaction.rs"
-
 [dependencies]
 time = "0.3.3"
 sha2 = "0.9.8"
-#hex-literal = "0.3.3"
 tonic = "0.6.0"
 prost = "0.9.0"
 tokio = {version = "1.13.0", features = ["rt-multi-thread"]}
+clap = "3.0.10"
+anyhow = "1.0.53"
 
 [build-dependencies]
 tonic-build = "0.6.0"

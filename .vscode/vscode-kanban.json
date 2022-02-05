@@ -4,6 +4,97 @@
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
       },
+      "category": "Integration Tests",
+      "creation_time": "2021-12-11T16:50:26.635Z",
+      "id": "8",
+      "references": [],
+      "title": "Add integration tests"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:41:23.734Z",
+      "id": "5",
+      "references": [],
+      "title": "Implement wallets"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Refactor",
+      "creation_time": "2021-12-24T11:39:50.686Z",
+      "description": {
+        "content": "For example implement To/From functions",
+        "mime": "text/markdown"
+      },
+      "id": "11",
+      "references": [],
+      "title": "Move conversion proto<->rust functions to a seperate file"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Improvements",
+      "creation_time": "2021-11-27T20:10:45.654Z",
+      "description": {
+        "content": "The function should probably return something smaller. Cloning is very expensive",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "references": [],
+      "title": "Refactor blockchain.create_block"
+    }
+  ],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Improvements",
+      "creation_time": "2021-12-24T11:09:26.761Z",
+      "id": "10",
+      "references": [],
+      "title": "Add last chain and transactions to hash",
+      "details": {
+        "content": "Figure out how to add the hash and transactions to the hash.",
+        "mime": "text/markdown"
+      }
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T22:15:57.018Z",
+      "description": {
+        "content": "We need an RPC call to get the whole chain.",
+        "mime": "text/markdown"
+      },
+      "id": "7",
+      "references": [],
+      "title": "Implement get_chain"
+    }
+  ],
+  "testing": [],
+  "done": [
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T20:11:45.781Z",
+      "id": "3",
+      "references": [],
+      "title": "Add transactions"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
       "category": "Unit tests",
       "creation_time": "2021-11-27T20:06:05.255Z",
       "id": "1",
@@ -15,10 +106,14 @@
         "name": "Nicolas Bru Frantzen"
       },
       "category": "New features",
-      "creation_time": "2021-11-27T20:41:23.734Z",
-      "id": "5",
+      "creation_time": "2021-11-27T20:22:30.328Z",
+      "description": {
+        "content": "It's currently commented.",
+        "mime": "text/markdown"
+      },
+      "id": "4",
       "references": [],
-      "title": "Implement wallets"
+      "title": "Implement previous_hash in mine response"
     },
     {
       "assignedTo": {
@@ -38,57 +133,11 @@
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
       },
-      "category": "Improvements",
-      "creation_time": "2021-11-27T20:10:45.654Z",
-      "description": {
-        "content": "The function should probably return something smaller. Cloning is very expensive",
-        "mime": "text/markdown"
-      },
-      "id": "2",
+      "category": "Transactions",
+      "creation_time": "2021-12-11T16:51:47.073Z",
+      "id": "9",
       "references": [],
-      "title": "Refactor blockchain.create_block"
-    },
-    {
-      "assignedTo": {
-        "name": "Nicolas Bru Frantzen"
-      },
-      "category": "New features",
-      "creation_time": "2021-11-27T22:15:57.018Z",
-      "description": {
-        "content": "We need an RPC call to get the whole chain.",
-        "mime": "text/markdown"
-      },
-      "id": "7",
-      "references": [],
-      "title": "Implement get_chain"
-    }
-  ],
-  "in-progress": [],
-  "testing": [],
-  "done": [
-    {
-      "assignedTo": {
-        "name": "Nicolas Bru Frantzen"
-      },
-      "category": "New features",
-      "creation_time": "2021-11-27T20:11:45.781Z",
-      "id": "3",
-      "references": [],
-      "title": "Add transactions"
-    },
-    {
-      "assignedTo": {
-        "name": "Nicolas Bru Frantzen"
-      },
-      "category": "New features",
-      "creation_time": "2021-11-27T20:22:30.328Z",
-      "description": {
-        "content": "It's currently commented.",
-        "mime": "text/markdown"
-      },
-      "id": "4",
-      "references": [],
-      "title": "Implement previous_hash in mine response"
+      "title": "Transactions must be a positive number"
     }
   ]
 }
