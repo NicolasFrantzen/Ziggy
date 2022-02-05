@@ -30,6 +30,8 @@ impl Block
 
         format!("{:X}", digested)
     }
+
+    pub fn transactions(&self) -> &Vec<Transaction> { &self.transactions }
 }
 
 
@@ -46,7 +48,9 @@ pub struct Transaction
 impl Transaction
 {
     pub fn sender(&self) -> &str { &self.sender }
+
     pub fn recipient(&self) -> &str { &self.recipient }
+
     pub fn amount(&self) -> f64 { self.amount }
 
     pub fn time(&self) -> u128
@@ -67,6 +71,7 @@ impl Transaction
 }
 
 
+#[derive(Clone, Debug)]
 pub struct Blockchain {
     chain: Vec<Block>,
     pending_transactions: Vec<Transaction>,
@@ -90,11 +95,12 @@ impl Blockchain
         }
     }
 
+    pub fn chain(&self) -> &Vec<Block> { &self.chain }
 
-    pub fn create_block(&mut self, nonce: u64, previous_hash: Sha256) -> Block
+    pub fn create_block(&mut self, nonce: u64, previous_hash: Sha256) -> &Block
     {
         let new_block: Block = Block {
-            index: (self.chain.len() + 1) as u64,
+            index: self.chain.len() as u64,
             time: SystemTime::now(),
             nonce,
             previous_hash,
@@ -103,7 +109,7 @@ impl Blockchain
 
         self.chain.push(new_block.clone());
 
-        new_block
+        self.get_last_block()
     }
 
 

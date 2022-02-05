@@ -1,4 +1,5 @@
 use clap::{Arg, App, AppSettings};
+use anyhow::{Result, bail};
 
 use ziggy::zigzag;
 use zigzag::ziggy_blockchain_client::ZiggyBlockchainClient;
@@ -6,25 +7,27 @@ use zigzag::{
     NewTransactionRequest, Transaction as GrpcTransaction
 };
 
-fn check_amount(argument: &str) -> Result<(), String>
-{
-    let amount: f64 = match argument.parse() {
-        Ok(a) => a,
-        Err(_) => return Err(String::from("Must be a valid number"))
-    };
 
-    if amount > 0.0
+fn check_amount(argument: &str) -> Result<()>
+{
+    if let Ok(amount) = argument.parse::<f64>()
     {
-        Ok(())
+        if amount <= 0.0
+        {
+            bail!("Must be positive");
+        }
     }
     else
     {
-        Err(String::from("Must be positive"))
+        bail!("Must be positive");
     }
+
+    Ok(())
 }
 
+
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>>
+async fn main() -> Result<()>
 {
     let args = App::new("transaction")
         .subcommand(App::new("new")
@@ -46,8 +49,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>
     if let Some(args) = args.subcommand_matches("new")
     {
         let channel = tonic::transport::Channel::from_static("http://[::1]:50051")
-        .connect()
-        .await?;
+                        .connect()
+                        .await?;
 
         let mut client = ZiggyBlockchainClient::new(channel);
 

@@ -35,9 +35,7 @@ message Block {
     uint64 time = 2;
     uint64 nonce = 3;
     string previous_hash = 4;
-
-    // Add transactions
-    //repeated Transaction Transactions;
+    repeated Transaction Transactions = 5;
 }
 
 message GetChainResponse {
