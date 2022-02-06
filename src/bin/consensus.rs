@@ -8,8 +8,8 @@ use anyhow::Result;
 async fn main() -> Result<()>
 {
     let channel = tonic::transport::Channel::from_static("http://[::1]:50051")
-    .connect()
-    .await?;
+        .connect()
+        .await?;
 
     let mut client = ZiggyBlockchainClient::new(channel);
 

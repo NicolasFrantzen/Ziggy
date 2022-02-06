@@ -13,13 +13,13 @@ use blockchain::Blockchain;
 use tonic::{Request, Response, Status};
 use anyhow::Result;
 
-use std::sync::{Arc, Mutex};
+use std::sync::Mutex;
 use std::ops::Deref;
 
 
 pub struct Ziggy
 {
-    blockchain: Arc<Mutex<Blockchain>>
+    blockchain: Mutex<Blockchain>
 }
 
 
@@ -27,7 +27,7 @@ impl Ziggy
 {
     pub fn new() -> Self
     {
-        Self { blockchain: Arc::new(Mutex::new(Blockchain::new())) }
+        Self { blockchain: Mutex::new(Blockchain::new()) }
     }
 
     fn mine_new_grpc_block(&self) -> GrpcBlock
@@ -42,7 +42,7 @@ impl Ziggy
         GrpcBlock::from(block)
     }
 
-    fn add_new_grpc_transaction(&self, sender: &str, recipient: &str, amount: f64)
+    fn add_new_transaction(&self, sender: &str, recipient: &str, amount: f64)
     {
         let mut chain = self.blockchain.lock().unwrap();
         chain.new_transaction(sender, recipient, amount);
@@ -77,13 +77,12 @@ impl ZiggyBlockchain for Ziggy
         println!("New transaction request received.");
 
         let request = request.get_ref();
-        match &request.transaction
-        {
-            Some(transaction) => self.add_new_grpc_transaction(&transaction.sender, &transaction.recipient, transaction.amount),
-            None => ()
-        }
-
         //dbg!(request);
+
+        if let Some(transaction) = &request.transaction
+        {
+            self.add_new_transaction(&transaction.sender, &transaction.recipient, transaction.amount);
+        }
 
         Ok(Response::new(NewTransactionResponse{}))
     }

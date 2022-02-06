@@ -1,5 +1,5 @@
 use clap::{Arg, App, AppSettings};
-use anyhow::{Result, bail};
+use anyhow::{Result, anyhow};
 
 use ziggy::zigzag;
 use zigzag::ziggy_blockchain_client::ZiggyBlockchainClient;
@@ -10,19 +10,11 @@ use zigzag::{
 
 fn check_amount(argument: &str) -> Result<()>
 {
-    if let Ok(amount) = argument.parse::<f64>()
-    {
-        if amount <= 0.0
-        {
-            bail!("Must be positive");
-        }
+    match argument.parse::<f64>() {
+        Ok(amount) if amount > 0.0 => Ok(()),
+        Ok(_) => Err(anyhow!("Must be positive!")),
+        _ => Err(anyhow!("Must be a float!")),
     }
-    else
-    {
-        bail!("Must be positive");
-    }
-
-    Ok(())
 }
 
 
@@ -49,8 +41,8 @@ async fn main() -> Result<()>
     if let Some(args) = args.subcommand_matches("new")
     {
         let channel = tonic::transport::Channel::from_static("http://[::1]:50051")
-                        .connect()
-                        .await?;
+            .connect()
+            .await?;
 
         let mut client = ZiggyBlockchainClient::new(channel);
 
