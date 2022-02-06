@@ -24,32 +24,16 @@
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
       },
-      "category": "Refactor",
-      "creation_time": "2021-12-24T11:39:50.686Z",
-      "description": {
-        "content": "For example implement To/From functions",
-        "mime": "text/markdown"
-      },
-      "id": "11",
+      "category": "Core features",
+      "creation_time": "2022-02-05T22:30:30.513Z",
+      "id": "12",
       "references": [],
-      "title": "Move conversion proto<->rust functions to a seperate file"
-    },
-    {
-      "assignedTo": {
-        "name": "Nicolas Bru Frantzen"
-      },
-      "category": "Improvements",
-      "creation_time": "2021-11-27T20:10:45.654Z",
-      "description": {
-        "content": "The function should probably return something smaller. Cloning is very expensive",
-        "mime": "text/markdown"
-      },
-      "id": "2",
-      "references": [],
-      "title": "Refactor blockchain.create_block"
+      "title": "Implement consensus algorithm"
     }
   ],
-  "in-progress": [
+  "in-progress": [],
+  "testing": [],
+  "done": [
     {
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
@@ -69,23 +53,6 @@
         "name": "Nicolas Bru Frantzen"
       },
       "category": "New features",
-      "creation_time": "2021-11-27T22:15:57.018Z",
-      "description": {
-        "content": "We need an RPC call to get the whole chain.",
-        "mime": "text/markdown"
-      },
-      "id": "7",
-      "references": [],
-      "title": "Implement get_chain"
-    }
-  ],
-  "testing": [],
-  "done": [
-    {
-      "assignedTo": {
-        "name": "Nicolas Bru Frantzen"
-      },
-      "category": "New features",
       "creation_time": "2021-11-27T20:11:45.781Z",
       "id": "3",
       "references": [],
@@ -100,6 +67,20 @@
       "id": "1",
       "references": [],
       "title": "Add unit testing"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "New features",
+      "creation_time": "2021-11-27T22:15:57.018Z",
+      "description": {
+        "content": "We need an RPC call to get the whole chain.",
+        "mime": "text/markdown"
+      },
+      "id": "7",
+      "references": [],
+      "title": "Implement get_chain"
     },
     {
       "assignedTo": {
@@ -128,6 +109,34 @@
       "id": "6",
       "references": [],
       "title": "Interface for adding transactions"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Refactor",
+      "creation_time": "2021-12-24T11:39:50.686Z",
+      "description": {
+        "content": "For example implement To/From functions",
+        "mime": "text/markdown"
+      },
+      "id": "11",
+      "references": [],
+      "title": "Move conversion proto<->rust functions to a seperate file"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
+      "category": "Improvements",
+      "creation_time": "2021-11-27T20:10:45.654Z",
+      "description": {
+        "content": "The function should probably return something smaller. Cloning is very expensive",
+        "mime": "text/markdown"
+      },
+      "id": "2",
+      "references": [],
+      "title": "Refactor blockchain.create_block"
     },
     {
       "assignedTo": {
