@@ -58,15 +58,21 @@ impl Transaction
         self.time.duration_since(SystemTime::UNIX_EPOCH).expect("").as_millis()
     }
 
-    pub fn hash(&mut self) -> Sha256
+    fn as_bytes(&self) -> Vec<u8>
     {
-        let mut hash = Sha256::new();
-        hash.update(&self.sender);
-        hash.update(&self.recipient);
-        hash.update(self.amount.to_le_bytes());
-        hash.update(self.time().to_le_bytes());
-
-        hash
+        self.sender.as_bytes()
+            .iter()
+            .cloned()
+            .chain(self.recipient().as_bytes()
+                .iter()
+                .cloned())
+            .chain(self.amount().to_le_bytes()
+                .iter()
+                .cloned())
+            .chain(self.time().to_le_bytes()
+                .iter()
+                .cloned())
+            .collect()
     }
 }
 
@@ -81,13 +87,15 @@ pub struct Blockchain {
 impl Blockchain
 {
     pub fn new() -> Blockchain {
-        let new_chain = vec![Block {
-            index: 0,
-            time: SystemTime::now(),
-            nonce: 0,
-            previous_hash: Sha256::new(),
-            transactions: Vec::new(),
-        }];
+        let new_chain = vec![
+            Block {
+                index: 0,
+                time: SystemTime::now(),
+                nonce: 0,
+                previous_hash: Sha256::new(),
+                transactions: Vec::new(),
+            }
+        ];
 
         Blockchain {
             chain: new_chain,
@@ -99,7 +107,7 @@ impl Blockchain
 
     pub fn create_block(&mut self, nonce: u64, previous_hash: Sha256) -> &Block
     {
-        let new_block: Block = Block {
+        let new_block = Block {
             index: self.chain.len() as u64,
             time: SystemTime::now(),
             nonce,
@@ -145,7 +153,8 @@ impl Blockchain
         hash.update(block.time().to_le_bytes());
         hash.update(block.nonce.to_le_bytes());
         hash.update(block.previous_hash.clone().finalize());
-        //hash.update(block.transactions);
+
+        block.transactions.iter().for_each(|t| hash.update(t.as_bytes()));
 
         hash
     }
@@ -198,6 +207,7 @@ mod tests {
         let mut blockchain = Blockchain::new();
         blockchain.new_transaction("test1", "test2", 1.0);
         blockchain.new_transaction("test2", "test1", 2.0);
+        blockchain.new_transaction("test2", "test1", -2.0);
 
         assert!(blockchain.pending_transactions.len() == 2);
     }

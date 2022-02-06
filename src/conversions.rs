@@ -8,7 +8,7 @@ impl From<&Blockchain> for GrpcBlockchain
 {
     fn from(blockchain: &Blockchain) -> GrpcBlockchain
     {
-        let blocks: Vec<GrpcBlock> = blockchain.chain()
+        let blocks: Vec<_> = blockchain.chain()
             .iter()
             .map(|c| GrpcBlock::from(c))
             .collect();
@@ -22,7 +22,7 @@ impl From<&Block> for GrpcBlock
 {
     fn from(block: &Block) -> GrpcBlock
     {
-        let transactions: Vec<GrpcTransaction> = block.transactions()
+        let transactions: Vec<_> = block.transactions()
             .iter()
             .map(|t| GrpcTransaction::from(t))
             .collect();
