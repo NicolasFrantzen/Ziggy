@@ -14,6 +14,16 @@
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
       },
+      "category": "Core features",
+      "creation_time": "2022-02-05T22:30:30.513Z",
+      "id": "12",
+      "references": [],
+      "title": "Implement consensus algorithm"
+    },
+    {
+      "assignedTo": {
+        "name": "Nicolas Bru Frantzen"
+      },
       "category": "New features",
       "creation_time": "2021-11-27T20:41:23.734Z",
       "id": "5",
@@ -24,11 +34,15 @@
       "assignedTo": {
         "name": "Nicolas Bru Frantzen"
       },
-      "category": "Core features",
-      "creation_time": "2022-02-05T22:30:30.513Z",
-      "id": "12",
+      "category": "Refactor",
+      "creation_time": "2022-02-06T16:12:11.499Z",
+      "description": {
+        "content": "Split the blockchain module into more modules.\nE.g.\nblock/Block\nblockchain/Blockchain\n\nUse folder structure.",
+        "mime": "text/markdown"
+      },
+      "id": "13",
       "references": [],
-      "title": "Implement consensus algorithm"
+      "title": "Split blockchain module into submodules"
     }
   ],
   "in-progress": [],
