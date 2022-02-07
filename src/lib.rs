@@ -1,5 +1,7 @@
 pub mod zigzag;
 pub mod blockchain;
+mod block;
+mod transaction;
 mod conversions;
 
 use zigzag::{
@@ -35,7 +37,7 @@ impl Ziggy
         let mut chain = self.blockchain.lock().unwrap();
         let last_block = chain.get_last_block();
         let nonce = Blockchain::proof_of_work(last_block.nonce());
-        let hash = chain.hash();
+        let hash = last_block.hash();
 
         let block = chain.create_block(nonce, hash);
 

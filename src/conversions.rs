@@ -1,7 +1,9 @@
 use crate::zigzag::{
     Block as GrpcBlock, Blockchain as GrpcBlockchain, Transaction as GrpcTransaction
 };
-use crate::blockchain::{Block, Blockchain, Transaction};
+use crate::blockchain::Blockchain;
+use crate::block::Block;
+use crate::transaction::Transaction;
 
 
 impl From<&Blockchain> for GrpcBlockchain

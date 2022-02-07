@@ -1,80 +1,10 @@
-use std::mem;
-use std::time::SystemTime;
+use crate::block::Block;
+use crate::transaction::Transaction;
+
 use sha2::{Sha256, Digest};
 
-
-#[derive(Clone, Debug)]
-pub struct Block
-{
-    index: u64,
-    time: SystemTime,
-    nonce: u64,
-    previous_hash: Sha256,
-    transactions: Vec<Transaction>,
-}
-
-
-impl Block
-{
-    pub fn index(&self) -> u64 { self.index }
-    pub fn nonce(&self) -> u64 { self.nonce }
-
-    pub fn time(&self) -> u128
-    {
-        self.time.duration_since(SystemTime::UNIX_EPOCH).expect("").as_millis()
-    }
-
-    pub fn previous_hash(&self) -> String
-    {
-        let digested = self.previous_hash.clone().finalize();
-
-        format!("{:X}", digested)
-    }
-
-    pub fn transactions(&self) -> &Vec<Transaction> { &self.transactions }
-}
-
-
-#[derive(Clone, Debug)]
-pub struct Transaction
-{
-    sender: String,
-    recipient: String,
-    amount: f64,
-    time: SystemTime,
-}
-
-
-impl Transaction
-{
-    pub fn sender(&self) -> &str { &self.sender }
-
-    pub fn recipient(&self) -> &str { &self.recipient }
-
-    pub fn amount(&self) -> f64 { self.amount }
-
-    pub fn time(&self) -> u128
-    {
-        self.time.duration_since(SystemTime::UNIX_EPOCH).expect("").as_millis()
-    }
-
-    fn as_bytes(&self) -> Vec<u8>
-    {
-        self.sender.as_bytes()
-            .iter()
-            .cloned()
-            .chain(self.recipient().as_bytes()
-                .iter()
-                .cloned())
-            .chain(self.amount().to_le_bytes()
-                .iter()
-                .cloned())
-            .chain(self.time().to_le_bytes()
-                .iter()
-                .cloned())
-            .collect()
-    }
-}
+use std::mem;
+use std::time::SystemTime;
 
 
 #[derive(Clone, Debug)]
@@ -86,18 +16,13 @@ pub struct Blockchain {
 
 impl Blockchain
 {
-    pub fn new() -> Blockchain {
+    pub fn new() -> Self
+    {
         let new_chain = vec![
-            Block {
-                index: 0,
-                time: SystemTime::now(),
-                nonce: 0,
-                previous_hash: Sha256::new(),
-                transactions: Vec::new(),
-            }
+            Block::new(0, 0, Sha256::new(), Vec::new())
         ];
 
-        Blockchain {
+        Self {
             chain: new_chain,
             pending_transactions: Vec::new(),
         }
@@ -107,15 +32,17 @@ impl Blockchain
 
     pub fn create_block(&mut self, nonce: u64, previous_hash: Sha256) -> &Block
     {
-        let new_block = Block {
-            index: self.chain.len() as u64,
-            time: SystemTime::now(),
+        let index = self.chain.len() as u64;
+        let transactions = mem::take(&mut self.pending_transactions);
+
+        let new_block = Block::new(
+            index,
             nonce,
             previous_hash,
-            transactions: mem::take(&mut self.pending_transactions),
-        };
+            transactions
+        );
 
-        self.chain.push(new_block.clone());
+        self.chain.push(new_block);
 
         self.get_last_block()
     }
@@ -125,13 +52,14 @@ impl Blockchain
     {
         if amount > 0.0
         {
-            self.pending_transactions.push(Transaction {
-                    sender: String::from(sender),
-                    recipient: String::from(recipient),
+            self.pending_transactions.push(
+                Transaction::new(
+                    String::from(sender),
+                    String::from(recipient),
                     amount,
-                    time: SystemTime::now(),
-                }
-            );
+                    SystemTime::now()
+                )
+            )
         }
 
         dbg!(&self.pending_transactions);
@@ -141,22 +69,6 @@ impl Blockchain
     pub fn get_last_block(&mut self) -> &Block
     {
         self.chain.last().expect("No elements in blockchain.")
-    }
-
-
-    pub fn hash(&mut self) -> Sha256
-    {
-        let block = self.get_last_block();
-
-        let mut hash = Sha256::new();
-        hash.update(block.index.to_le_bytes());
-        hash.update(block.time().to_le_bytes());
-        hash.update(block.nonce.to_le_bytes());
-        hash.update(block.previous_hash.clone().finalize());
-
-        block.transactions.iter().for_each(|t| hash.update(t.as_bytes()));
-
-        hash
     }
 
 
@@ -193,7 +105,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn proof_of_work()
+    fn test_proof_of_work()
     {
         assert!(Blockchain::validate_proof(0, 2336));
         assert!(Blockchain::validate_proof(1, 45));
@@ -202,7 +114,7 @@ mod tests {
 
 
     #[test]
-    fn new_transactions()
+    fn test_new_transactions()
     {
         let mut blockchain = Blockchain::new();
         blockchain.new_transaction("test1", "test2", 1.0);
@@ -214,7 +126,7 @@ mod tests {
 
 
     #[test]
-    fn add_new_block()
+    fn test_add_new_block()
     {
         let mut blockchain = Blockchain::new();
         blockchain.new_transaction("test1", "test2", 1.0);
@@ -224,6 +136,6 @@ mod tests {
 
         // Pending transactions are moved
         assert!(blockchain.pending_transactions.is_empty());
-        assert!(blockchain.chain[blockchain.chain.len() - 1].transactions.len() == 2);
+        assert!(blockchain.chain[blockchain.chain.len() - 1].transactions().len() == 2);
     }
 }
