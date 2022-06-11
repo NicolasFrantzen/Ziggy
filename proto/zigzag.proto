@@ -5,10 +5,12 @@ package zigzag;
 
 import "google/protobuf/empty.proto";
 
-service ZiggyBlockchain {
+service ZiggyService {
     rpc Mine (google.protobuf.Empty) returns (MineResponse);
     rpc NewTransaction (NewTransactionRequest) returns (NewTransactionResponse);
     rpc GetChain (google.protobuf.Empty) returns (GetChainResponse);
+    rpc RegisterNodes (RegisterNodesRequest) returns (RegisterNodesResponse);
+    rpc ResolveConflicts (ResolveConflictsRequest) returns (ResolveConflictsResponse);
 }
 
 message MineResponse {
@@ -44,4 +46,24 @@ message GetChainResponse {
 
 message Blockchain {
     repeated Block blocks = 1;
+}
+
+message RegisterNodesRequest {
+    message Node {
+        string address = 1;
+        uint32 port = 2;
+    }
+    repeated Node nodes = 1;
+}
+
+message RegisterNodesResponse {
+
+}
+
+message ResolveConflictsRequest {
+
+}
+
+message ResolveConflictsResponse {
+
 }

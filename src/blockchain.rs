@@ -47,7 +47,6 @@ impl Blockchain
         self.get_last_block()
     }
 
-
     pub fn new_transaction(&mut self, sender: &str, recipient: &str, amount: f64)
     {
         if amount > 0.0
@@ -65,12 +64,10 @@ impl Blockchain
         dbg!(&self.pending_transactions);
     }
 
-
     pub fn get_last_block(&mut self) -> &Block
     {
         self.chain.last().expect("No elements in blockchain.")
     }
-
 
     pub fn proof_of_work(last_nonce: u64) -> u64
     {
@@ -84,7 +81,6 @@ impl Blockchain
             nonce += 1;
         }
     }
-
 
     pub fn validate_proof(last_nonce: u64, nonce: u64) -> bool
     {

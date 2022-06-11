@@ -12,7 +12,7 @@ impl From<&Blockchain> for GrpcBlockchain
     {
         let blocks: Vec<_> = blockchain.chain()
             .iter()
-            .map(|c| GrpcBlock::from(c))
+            .map(GrpcBlock::from)
             .collect();
 
         GrpcBlockchain { blocks }
@@ -26,7 +26,7 @@ impl From<&Block> for GrpcBlock
     {
         let transactions: Vec<_> = block.transactions()
             .iter()
-            .map(|t| GrpcTransaction::from(t))
+            .map(GrpcTransaction::from)
             .collect();
 
         GrpcBlock {

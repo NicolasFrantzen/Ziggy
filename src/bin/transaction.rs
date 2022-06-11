@@ -2,7 +2,7 @@ use clap::{Arg, App, AppSettings};
 use anyhow::{Result, anyhow};
 
 use ziggy::zigzag;
-use zigzag::ziggy_blockchain_client::ZiggyBlockchainClient;
+use zigzag::ziggy_service_client::ZiggyServiceClient;
 use zigzag::{
     NewTransactionRequest, Transaction as GrpcTransaction
 };
@@ -44,7 +44,7 @@ async fn main() -> Result<()>
             .connect()
             .await?;
 
-        let mut client = ZiggyBlockchainClient::new(channel);
+        let mut client = ZiggyServiceClient::new(channel);
 
         let response = client.new_transaction(tonic::Request::new(
             NewTransactionRequest {
