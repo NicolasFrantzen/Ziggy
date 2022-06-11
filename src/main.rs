@@ -1,5 +1,5 @@
-use ziggy::zigzag::ziggy_blockchain_server::ZiggyBlockchainServer;
-use ziggy::Ziggy;
+use ziggy::zigzag::ziggy_service_server::ZiggyServiceServer;
+use ziggy::ziggy::Ziggy;
 
 use tonic::transport::Server;
 use anyhow::Result;
@@ -13,7 +13,7 @@ async fn main() -> Result<()>
     println!("Server listening on {}", addr);
 
     Server::builder()
-        .add_service(ZiggyBlockchainServer::new(service))
+        .add_service(ZiggyServiceServer::new(service))
         .serve(addr)
         .await?;
     Ok(())
