@@ -14,6 +14,15 @@ pub struct Blockchain {
 }
 
 
+impl Default for Blockchain
+{
+    fn default() -> Self
+    {
+        Self::new()
+    }
+}
+
+
 impl Blockchain
 {
     pub fn new() -> Self
@@ -61,6 +70,7 @@ impl Blockchain
             )
         }
 
+        #[cfg(debug_assertions)]
         dbg!(&self.pending_transactions);
     }
 
@@ -89,6 +99,8 @@ impl Blockchain
         hash.update(nonce.to_le_bytes());
 
         let digested = hash.finalize();
+
+        #[cfg(debug_assertions)]
         dbg!(format!("{:X}", digested));
 
         digested[digested.len() - 2..] == [0x00, 0x00]

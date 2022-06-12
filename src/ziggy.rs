@@ -13,30 +13,28 @@ use crate::zigzag::{
 };
 
 use crate::blockchain::Blockchain;
+use crate::node::{Nodes, Node};
 
 use tonic::{Request, Response, Status};
 use anyhow::Result;
 
 use std::sync::Mutex;
 use std::ops::Deref;
-use std::net::Ipv4Addr;
-
-
-
-pub struct Node
-{
-    address: Ipv4Addr,
-    port: u32,
-}
-
-
-type Nodes = Mutex<Vec<Node>>;
 
 
 pub struct Ziggy
 {
     blockchain: Mutex<Blockchain>,
-    nodes: Nodes,
+    nodes: Mutex<Nodes>,
+}
+
+
+impl Default for Ziggy
+{
+    fn default() -> Self
+    {
+        Self::new()
+    }
 }
 
 
@@ -73,6 +71,15 @@ impl Ziggy
         let chain = self.blockchain.lock().unwrap();
 
         GrpcBlockchain::from(chain.deref())
+    }
+
+    fn register_node(&self, new_nodes: &mut Nodes) // TODO: implement already exist, use tonic::Status::already_exists
+    {
+        let mut nodes = self.nodes.lock().unwrap();
+        nodes.append(new_nodes);
+
+        #[cfg(debug_assertions)]
+        dbg!(&nodes);
     }
 }
 
@@ -114,9 +121,23 @@ impl ZiggyService for Ziggy
         }))
     }
 
-    async fn register_nodes(&self, _request: Request<RegisterNodesRequest>) -> Result<Response<RegisterNodesResponse>, Status>
+    async fn register_nodes(&self, request: Request<RegisterNodesRequest>) -> Result<Response<RegisterNodesResponse>, Status>
     {
-        Ok(Response::new(RegisterNodesResponse { }))
+        let request_nodes = request.into_inner().nodes
+            .into_iter()
+            .map(Node::try_from)
+            .collect::<Result<_>>();
+
+        if let Ok(mut request_nodes) = request_nodes
+        {
+            self.register_node(&mut request_nodes);
+
+            Ok(Response::new(RegisterNodesResponse { }))
+        }
+        else
+        {
+            Err(Status::invalid_argument("IP address is not valid"))
+        }
     }
 
     async fn resolve_conflicts(&self, _request: Request<ResolveConflictsRequest>) -> Result<Response<ResolveConflictsResponse>, Status>

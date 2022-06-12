@@ -4,3 +4,4 @@ pub mod blockchain;
 mod block;
 mod transaction;
 mod conversions;
+mod node;

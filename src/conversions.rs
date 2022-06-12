@@ -1,9 +1,20 @@
 use crate::zigzag::{
-    Block as GrpcBlock, Blockchain as GrpcBlockchain, Transaction as GrpcTransaction
+    Block as GrpcBlock,
+    Blockchain as GrpcBlockchain,
+    Transaction as GrpcTransaction,
+    register_nodes_request::Node as GrpcNode,
 };
-use crate::blockchain::Blockchain;
-use crate::block::Block;
-use crate::transaction::Transaction;
+
+use crate::{
+    blockchain::Blockchain,
+    block::Block,
+    transaction::Transaction,
+    node::Node,
+};
+
+use std::net::Ipv4Addr;
+use std::str::FromStr;
+use anyhow::{Result, Error};
 
 
 impl From<&Blockchain> for GrpcBlockchain
@@ -50,5 +61,16 @@ impl From<&Transaction> for GrpcTransaction
             amount: transaction.amount(),
             time: Some(transaction.time() as u64),
         }
+    }
+}
+
+
+impl TryFrom<GrpcNode> for Node
+{
+    type Error = Error;
+
+    fn try_from(node: GrpcNode) -> Result<Node>
+    {
+        Ok(Node::new(Ipv4Addr::from_str(&node.address)?, node.port))
     }
 }
