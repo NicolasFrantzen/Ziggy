@@ -109,7 +109,8 @@ impl Blockchain
 
 
 #[cfg(test)]
-mod tests {
+mod tests
+{
     use super::*;
 
     #[test]

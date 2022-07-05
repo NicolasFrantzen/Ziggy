@@ -165,3 +165,50 @@ impl ZiggyService for Ziggy
         todo!()
     }
 }
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::zigzag::register_nodes_request::Node as GrpcNode;
+
+    fn new_request(ip: &str, port: u32) -> tonic::Request<RegisterNodesRequest>
+    {
+        let new_node = GrpcNode {
+            address: String::from(ip),
+            port: port,
+        };
+
+        let request = tonic::Request::new(
+            RegisterNodesRequest {
+                nodes: vec![new_node],
+                }
+        );
+
+        request
+    }
+
+    #[tokio::test]
+    async fn test_register_nodes()
+    {
+        let service = Ziggy::new();
+
+        // First register is ok
+        let result = service.register_nodes(new_request("127.0.0.1", 50052)).await;
+        assert!(result.is_ok());
+
+        // Test already exists
+        let result = service.register_nodes(new_request("127.0.0.1", 50052)).await;
+        assert_eq!(result.unwrap_err().code(), tonic::Code::AlreadyExists);
+
+    }
+
+    #[tokio::test]
+    async fn test_register_nodes_invalid_ip()
+    {
+        let service = Ziggy::new();
+
+        let result = service.register_nodes(new_request("localhost", 50052)).await;
+        assert_eq!(result.unwrap_err().code(), tonic::Code::InvalidArgument);
+    }
+}
