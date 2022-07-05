@@ -5,7 +5,7 @@ use std::net::Ipv4Addr;
 
 pub type Nodes = Vec<Node>;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Node
 {
     address: Ipv4Addr,

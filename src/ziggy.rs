@@ -73,13 +73,24 @@ impl Ziggy
         GrpcBlockchain::from(chain.deref())
     }
 
-    fn register_node(&self, new_nodes: &mut Nodes) // TODO: implement already exist, use tonic::Status::already_exists
+    fn register_node(&self, new_nodes: &Nodes) -> Result<(), Status>
     {
         let mut nodes = self.nodes.lock().unwrap();
-        nodes.append(new_nodes);
 
-        #[cfg(debug_assertions)]
-        dbg!(&nodes);
+        for new_node in new_nodes.iter().cloned()
+        {
+            if nodes.contains(&new_node)
+            {
+                return Err(Status::already_exists("Node has already been registered"));
+            }
+
+            nodes.push(new_node);
+
+            #[cfg(debug_assertions)]
+            dbg!(&nodes);
+        }
+
+        Ok(())
     }
 }
 
@@ -116,6 +127,8 @@ impl ZiggyService for Ziggy
 
     async fn get_chain(&self, _request: Request<()>) -> Result<Response<GetChainResponse>, Status>
     {
+        println!("Get chain request received.");
+
         Ok(Response::new(GetChainResponse {
             blockchain: Some(self.get_grpc_blockchain()),
         }))
@@ -123,14 +136,16 @@ impl ZiggyService for Ziggy
 
     async fn register_nodes(&self, request: Request<RegisterNodesRequest>) -> Result<Response<RegisterNodesResponse>, Status>
     {
+        println!("Register nodes request received.");
+
         let request_nodes = request.into_inner().nodes
             .into_iter()
             .map(Node::try_from)
             .collect::<Result<_>>();
 
-        if let Ok(mut request_nodes) = request_nodes
+        if let Ok(request_nodes) = request_nodes
         {
-            self.register_node(&mut request_nodes);
+            self.register_node(&request_nodes)?;
 
             Ok(Response::new(RegisterNodesResponse { }))
         }
@@ -142,6 +157,8 @@ impl ZiggyService for Ziggy
 
     async fn resolve_conflicts(&self, _request: Request<ResolveConflictsRequest>) -> Result<Response<ResolveConflictsResponse>, Status>
     {
+        println!("Resolve conflicts request received.");
+
         /*Ok(Response::new(GetChainResponse {
             blockchain: Some(self.get_grpc_blockchain()),
         }))*/
